@@ -233,22 +233,4 @@ def process_prompt_template(
     # Update the input variables field in the template
     update_input_variables_field(input_variables, frontend_node_template)
 
-    # Optional: cleanup fields based on specific conditions
-    # cleanup_prompt_template_fields(input_variables, frontend_node_template)
-
     return input_variables
-
-
-def cleanup_prompt_template_fields(input_variables, template):
-    """Removes unused fields if the conditions are met in the template."""
-    print(f"Cleaning up prompt template fields: {input_variables}")
-    prompt_fields = [
-        key for key, field in template.items() if isinstance(field, dict) and field.get("type") == "prompt"
-    ]
-
-    if len(prompt_fields) == 1:
-        print(f"Cleaning up prompt template fields because prompt ifelds is: {prompt_fields}")
-        for key in list(template.keys()):  # Use list to copy keys
-            field = template.get(key, {})
-            if isinstance(field, dict) and field.get("type") != "code" and key not in input_variables + prompt_fields:
-                del template[key]
