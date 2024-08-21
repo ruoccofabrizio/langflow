@@ -2431,17 +2431,7 @@
                 "method": "run_model",
                 "name": "api_run_model",
                 "selected": "Data",
-<<<<<<< HEAD
-<<<<<<< HEAD
-                "types": [
-                  "Data"
-                ],
-=======
-                "types": ["Data", "list"],
->>>>>>> c40dd41cc (csv output parser)
-=======
                 "types": ["Data"],
->>>>>>> bf5fbc2a3 (revert changes to notebooks)
                 "value": "__UNDEFINED__"
               },
               {
@@ -2450,17 +2440,7 @@
                 "method": "build_tool",
                 "name": "api_build_tool",
                 "selected": "Tool",
-<<<<<<< HEAD
-<<<<<<< HEAD
-                "types": [
-                  "Tool"
-                ],
-=======
-                "types": ["Tool", "Sequence"],
->>>>>>> c40dd41cc (csv output parser)
-=======
                 "types": ["Tool"],
->>>>>>> bf5fbc2a3 (revert changes to notebooks)
                 "value": "__UNDEFINED__"
               }
             ],
