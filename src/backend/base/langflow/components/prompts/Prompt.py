@@ -26,13 +26,16 @@ class PromptComponent(Component):
     async def build_prompt(
         self,
     ) -> Message:
-        print("Building prompt")
+        # The prompt template has already been processed and determined its user-defined variables;
+        # this appends the additional {format_instructions} variables, if defined.
+        if self.format_instructions:
+            self._attributes["template"] = self._attributes["template"] + "\n\n{format_instructions}"
+
         prompt = await Message.from_template_and_variables(**self._attributes)
         self.status = prompt.text
         return prompt
 
     def _update_template(self, frontend_node: dict):
-        print("Updating template")
         prompt_template = frontend_node["template"]["template"]["value"]
         custom_fields = frontend_node["custom_fields"]
         frontend_node_template = frontend_node["template"]
@@ -48,7 +51,6 @@ class PromptComponent(Component):
         """
         This function is called after the code validation is done.
         """
-        print(f"Doing post code processing for PromptComponent with node: {new_frontend_node}, {current_frontend_node}")
         frontend_node = super().post_code_processing(new_frontend_node, current_frontend_node)
         template = frontend_node["template"]["template"]["value"]
         # Kept it duplicated for backwards compatibility

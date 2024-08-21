@@ -170,7 +170,6 @@ class LCModelComponent(Component):
         inputs: Union[list, dict] = messages or {}
         try:
             if self.output_parser is not None:
-                print(f"Running with output parser: {self.output_parser}")
                 runnable = runnable | self.output_parser
 
             runnable = runnable.with_config(  # type: ignore
