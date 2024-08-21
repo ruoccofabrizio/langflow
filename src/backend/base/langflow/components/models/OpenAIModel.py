@@ -80,9 +80,9 @@ class OpenAIModelComponent(LCModelComponent):
             name="output_parser",
             display_name="Output Parser",
             info="The output parser to use to parse the output of the model",
-            advanced=False, # TODO fraz: probably make true
-            input_types=["BaseOutputParser"]
-        )
+            advanced=False,  # TODO fraz: probably make true
+            input_types=["BaseOutputParser"],
+        ),
     ]
 
     def build_model(self) -> LanguageModel:  # type: ignore[type-var]

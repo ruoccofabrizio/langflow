@@ -180,7 +180,7 @@ def add_new_variables_to_template(input_variables, custom_fields, template, name
 
 def remove_old_variables_from_template(old_custom_fields, input_variables, custom_fields, template, name):
     for variable in old_custom_fields:
-        if variable not in input_variables: # and not key in custom fields
+        if variable not in input_variables:  # and not key in custom fields
             try:
                 # Remove the variable from custom_fields associated with the given name
                 if variable in custom_fields[name]:
