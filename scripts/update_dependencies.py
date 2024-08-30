@@ -34,7 +34,7 @@ def is_development_release(version):
     """
     Determines if the version is a development version based on PEP 440.
 
-    We consider a develoment version (.devN) as our nightly versions
+    We consider a development version (.devN) as our nightly versions
     """
     return "dev" in version
 
@@ -69,6 +69,7 @@ if __name__ == "__main__":
     version = read_version_from_pyproject(langflow_base_path)
     if version:
         # Nightly versions contain "dev"
+        # WARNING: This will cause issues if we release `.dev` versions to `langflow` or `langflow-base`
         is_nightly = is_development_release(version)
         update_pyproject_dependency(pyproject_path, version, is_nightly)
     else:

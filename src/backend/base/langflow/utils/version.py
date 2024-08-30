@@ -5,7 +5,7 @@ from langflow.logging.logger import logger
 
 
 def _compute_non_prerelease_version(prerelease_version: str) -> str:
-    prerelease_keywords = ["a", "b", "rc"]
+    prerelease_keywords = ["a", "b", "rc", "dev", "post"]
     for keyword in prerelease_keywords:
         if keyword in prerelease_version:
             return prerelease_version.split(keyword)[0][:-1]

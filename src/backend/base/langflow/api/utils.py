@@ -91,7 +91,8 @@ async def check_langflow_version(component: StoreComponentCreate):
     if not component.last_tested_version:
         component.last_tested_version = __version__
 
-    # TODO: FRAZ - Figure out what I want the behavior to be for nightly builds
+    # TODO: For nightly builds, think about whether we want to check the
+    # latest nightly version instead. This method checks the latest stable version.
     langflow_version = get_lf_version_from_pypi()
     if langflow_version is None:
         raise HTTPException(status_code=500, detail="Unable to verify the latest version of Langflow")

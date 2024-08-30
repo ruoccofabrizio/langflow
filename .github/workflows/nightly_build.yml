@@ -70,30 +70,30 @@ jobs:
 
           git tag -a $MAIN_TAG -m "Langflow nightly $MAIN_TAG"
           git push origin $MAIN_TAG || echo "Tag push failed. Check if the tag already exists."
+          # TODO: notify on failure
 
-      # TODO: Slack message on failure
+  frontend-tests:
+    name: Run Frontend Tests
+    needs: create-nightly-tag
+    uses: ./.github/workflows/typescript_test.yml
+    with:
+      tests_folder: "tests/end-to-end"
+      ref: ${{ needs.create-nightly-tag.outputs.tag }}
+    secrets:
+      OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
+      STORE_API_KEY: "${{ secrets.STORE_API_KEY }}"
 
-  # frontend-tests:
-  #   name: Run Frontend Tests
-  #   needs: create-nightly-tag
-  #   uses: ./.github/workflows/typescript_test.yml
-  #   with:
-  #     tests_folder: "tests/end-to-end"
-  #     ref: ${{ needs.create-nightly-tag.outputs.tag }}
-  #   secrets:
-  #     OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
-  #     STORE_API_KEY: "${{ secrets.STORE_API_KEY }}"
-
-  # backend-unit-tests:
-  #   name: Run Backend Unit Tests
-  #   needs: create-nightly-tag
-  #   uses: ./.github/workflows/python_test.yml
-  #   with:
-  #     python-versions: '["3.10", "3.11", "3.12"]'
-  #     ref: ${{ needs.create-nightly-tag.outputs.tag }}
+  backend-unit-tests:
+    name: Run Backend Unit Tests
+    needs: create-nightly-tag
+    uses: ./.github/workflows/python_test.yml
+    with:
+      python-versions: '["3.10", "3.11", "3.12"]'
+      ref: ${{ needs.create-nightly-tag.outputs.tag }}
 
   # Not making nightly builds dependent on integration test success
   # due to inherent flakiness of 3rd party integrations
+  # Revisit when https://github.com/langflow-ai/langflow/pull/3607 is merged.
   # backend-integration-tests:
   #   name: Run Backend Integration Tests
   #   needs: create-nightly-tag
@@ -104,12 +104,11 @@ jobs:
 
   release-nightly-build:
     name: Run Nightly Langflow Build
-    # needs: [frontend-tests, backend-unit-tests, create-nightly-tag]
-    needs: [create-nightly-tag]
+    needs: [frontend-tests, backend-unit-tests, create-nightly-tag]
     uses: ./.github/workflows/release_nightly.yml
     with:
-      build_docker_base: true
-      build_docker_main: true
+      build_docker_base: false # TODO: Docker builds
+      build_docker_main: false
       nightly_tag_main: ${{ needs.create-nightly-tag.outputs.main_tag }}
       nightly_tag_base: ${{ needs.create-nightly-tag.outputs.base_tag }}
     secrets: inherit
