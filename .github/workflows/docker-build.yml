@@ -30,7 +30,7 @@ on:
         default: true
 env:
   POETRY_VERSION: "1.8.2"
-  TEST_TAG: "langflowai/langflow:test"
+  TEST_TAG: "fruocco/langflow:test"
 
 jobs:
   get-version:
@@ -77,13 +77,13 @@ jobs:
         id: set-vars
         run: |
           if [[ "${{ inputs.release_type }}" == "base" ]]; then
-            echo "tags=langflowai/langflow:base-${{ needs.get-version.outputs.version }},langflowai/langflow:base-latest" >> $GITHUB_OUTPUT
+            echo "tags=fruocco/langflow:base-${{ needs.get-version.outputs.version }},fruocco/langflow:base-latest" >> $GITHUB_OUTPUT
             echo "file=./docker/build_and_push_base.Dockerfile" >> $GITHUB_OUTPUT
           else
             if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-              echo "tags=langflowai/langflow:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
+              echo "tags=fruocco/langflow:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
             else
-              echo "tags=langflowai/langflow:${{ needs.get-version.outputs.version }},langflowai/langflow:latest" >> $GITHUB_OUTPUT
+              echo "tags=fruocco/langflow:${{ needs.get-version.outputs.version }},fruocco/langflow:latest" >> $GITHUB_OUTPUT
             fi
             echo "file=./docker/build_and_push.Dockerfile" >> $GITHUB_OUTPUT
           fi
@@ -119,10 +119,10 @@ jobs:
         include:
           - component: backend
             dockerfile: ./docker/build_and_push_backend.Dockerfile
-            tags: ${{ inputs.pre_release == 'true' && format('langflowai/langflow-backend:{0}', needs.get-version.outputs.version) || format('langflowai/langflow-backend:{0},langflowai/langflow-backend:latest', needs.get-version.outputs.version) }}
+            tags: ${{ inputs.pre_release == 'true' && format('fruocco/langflow-backend:{0}', needs.get-version.outputs.version) || format('fruocco/langflow-backend:{0},fruocco/langflow-backend:latest', needs.get-version.outputs.version) }}
           - component: frontend
             dockerfile: ./docker/frontend/build_and_push_frontend.Dockerfile
-            tags: ${{ inputs.pre_release == 'true' && format('langflowai/langflow-frontend:{0}', needs.get-version.outputs.version) || format('langflowai/langflow-frontend:{0},langflowai/langflow-frontend:latest', needs.get-version.outputs.version) }}
+            tags: ${{ inputs.pre_release == 'true' && format('fruocco/langflow-frontend:{0}', needs.get-version.outputs.version) || format('fruocco/langflow-frontend:{0},fruocco/langflow-frontend:latest', needs.get-version.outputs.version) }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Docker Buildx
@@ -140,7 +140,7 @@ jobs:
           context: .
           push: true
           build-args: |
-            LANGFLOW_IMAGE=langflowai/langflow:${{ needs.get-version.outputs.version }}
+            LANGFLOW_IMAGE=fruocco/langflow:${{ needs.get-version.outputs.version }}
           file: ${{ matrix.dockerfile }}
           tags: ${{ matrix.tags }}
           # provenance: false will result in a single manifest for all platforms which makes the image pullable from arm64 machines via the emulation (e.g. Apple Silicon machines)
